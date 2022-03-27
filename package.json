@@ -10,6 +10,12 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.2",
-    "socket.io": "^4.4.0"
+    "socket.io": "^4.4.0",
+    "socket.io-client": "^4.4.1",
+    "ts-node": "^10.7.0"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.21",
+    "tslib": "^2.3.1"
   }
 }

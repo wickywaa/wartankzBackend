@@ -1,5 +1,5 @@
 import { Socket } from "socket.io";
-
+const cors = require("cors");
 const express = require("express");
 const app = express();
 const http = require("http");
@@ -15,6 +15,7 @@ const io = new Server(server, {
 const userRouter = require("./Routers/userRouter");
 
 app.use(express.json());
+app.use(cors());
 app.use(userRouter);
 
 interface userobject {
@@ -28,18 +29,11 @@ interface messageObject {
   userName: string;
   message: string;
 }
-let users: userobject[] = [];
-let messages: messageObject[]= [];
+let users: userobject[] =[];
+let messages: messageObject[] = [];
 
 const addUser = () => {};
 
-const checkIfUserinArray = (email: string): boolean => {
-  const user = users.filter((user) => {
-    user.email === email;
-    return true;
-  });
-  return user ? false : true;
-};
 
 io.on("connection", (socket: Socket) => {
   socket.on("disconnect", () => {
@@ -51,21 +45,19 @@ io.on("connection", (socket: Socket) => {
 
   socket.on("registeruser", (user: userobject) => {
     const filteredusers = users.filter(
-      (olduser) => user.email !== olduser.email
+      (olduser) => user.email != olduser.email
     );
-
+    users= filteredusers
     console.log("users", users);
-    users = [...filteredusers, user];
-
-    console.log('here is the list of users "', users);
+    users =[...users,user] 
     io.sockets.emit("user_list", users);
 
     // addUser(socket)
   });
 
   socket.on("add_chat_message", (message: messageObject) => {
-      messages.push(message)
-    io.sockets.emit("messages_list",messages);
+    messages.push(message);
+    io.sockets.emit("messages_list", messages);
   });
 });
 

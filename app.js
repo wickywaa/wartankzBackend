@@ -19,22 +19,17 @@ var addUser = function () {
 var checkIfUserinArray = function (email) {
     var user = users.filter(function (user) {
         user.email === email;
-        console.log('found user in array', user);
-        console.log(users);
         return true;
     });
     if (user)
         return true;
-    console.log(user);
 };
 io.on('connection', function (socket) {
     console.log('user connected')
     socket.on('disconnect', function () {
-        console.log('user disconnected');
     });
     socket.on('registeruser', function (user) {
         checkIfUserinArray(user.email);
-        console.log(socket.id);
         // addUser(socket)
     });
 });

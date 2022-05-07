@@ -1,10 +1,12 @@
 import { Socket } from "socket.io";
+require('dotenv').config()
 const cors = require("cors");
 const express = require("express");
 const app = express();
 const http = require("http");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
+const {showlistofBotz}  = require("./database/mongodb")
 const io = new Server(server, {
    cors: {
     origin: ["http://localhost:3000" ,"http://192.168.0.127"],
@@ -13,10 +15,20 @@ const io = new Server(server, {
   }, 
 });
 const userRouter = require("./Routers/userRouter");
+const botRouter= require("./Routers/botsRouter")
+
+
+
+
+showlistofBotz((botz:any)=>{
+
+console.log(botz)
+})
 
 app.use(express.json());
 app.use(cors());
 app.use(userRouter);
+app.use(botRouter)
 
 interface userobject {
   Action: string;
@@ -42,6 +54,8 @@ let bots: botObject[]=[];
 let messages: messageObject[] = [];
 
 const addUser = () => {};
+
+const listofBotz =  
 
 io.on("connection", (socket: Socket) => {
   socket.on("disconnect", () => {

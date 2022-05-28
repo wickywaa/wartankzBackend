@@ -11,6 +11,17 @@ var io = new Server(server, {
     }
 });
 var userRouter = require('./Routers/userRouter');
+app.use((req,res,next)=>{
+
+
+    console.log('this is the middleware')
+    console.log(req.body)
+
+
+
+    next()
+
+})
 app.use(express.json());
 app.use(userRouter);
 var users = [];

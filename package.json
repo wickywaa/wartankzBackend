@@ -13,6 +13,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.2",
     "mongodb": "^4.5.0",
+    "opentok": "^2.14.3",
     "socket.io": "^4.4.0",
     "socket.io-client": "^4.4.1",
     "ts-node": "^10.7.0"

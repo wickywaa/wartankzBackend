@@ -27,8 +27,10 @@ botRouter.get('/getallbotz',cors(corsOptions),(req,res)=>{
     })
 })
 botRouter.get('/getbotsessionidwithtoken',auth,(req,res)=>{
+    console.log('reques here')
     const botId = req.query.botId;
     getbotSessionId(botId,(session)=>{
+        
         res.send(session);
     })
 })

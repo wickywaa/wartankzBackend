@@ -58,12 +58,40 @@ const addUser = () => {};
 const listofBotz =  
 
 io.on("connection", (socket: Socket) => {
+  //  works eith string
+  //const map = [{"username":"vsf"},{"message":"sgs"}]
+
+  const map = ["username","vsf"]
+   const jsonmap = JSON.stringify(map) 
+
+  socket.emit('setControls',{
+    up: false,
+    down: true,
+    right: true,
+    left: false,
+    turretUp: false,
+    turretDown: false,
+    turretLeft: false,
+    turretRight: false,
+    driveSpeed: 51,
+    turretSpeed: 40,
+    lights: false,
+
+  })
+
+
+  console.log('hello')
   socket.on("disconnect", () => {
     const newusers = users.filter((user) => {
       user.socketId !== socket.id;
     });
     socket.broadcast.emit("user_list", newusers);
   });
+
+  socket.on('add user', (socket:Socket)=>{
+    console.log(socket)
+
+  })
 
   socket.on("registeruser", (user: userobject) => {
     console.log(user)
@@ -90,6 +118,14 @@ io.on("connection", (socket: Socket) => {
     messages.push(message);
     io.sockets.emit("messages_list", messages);
   });
+
+  socket.on("send_bot_message",(message)=>{
+    console.log('got here')
+    const array  = [{"username":"wjdfh"},{}]
+    const jsonmap = JSON.stringify(array)
+    console.log(message)
+    io.sockets.emit("setControls",{...message})
+  })
 });
 
 server.listen(8080, () => {

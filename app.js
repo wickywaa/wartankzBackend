@@ -3,13 +3,7 @@ var app = express();
 var http = require('http');
 var server = http.createServer(app);
 var Server = require("socket.io").Server;
-var io = new Server(server, {
-    cors: {
-        origin: "http://localhost:3000",
-        methods: ["GET,POST"],
-        allowedHeaders: ["my-custom-header"]
-    }
-});
+var io = new Server(server);
 var userRouter = require('./Routers/userRouter');
 app.use((req,res,next)=>{
 
@@ -38,6 +32,10 @@ io.on('connection', function (socket) {
         // addUser(socket)
     });
 });
+
+io.on('add user',()=>{
+    console.log('logging in')
+})
 server.listen(8080, function () {
     console.log('listening on *:8000');
 });

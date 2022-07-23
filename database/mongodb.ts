@@ -1,5 +1,6 @@
 import * as mongoDB from "mongodb";
 import * as dotenv from "dotenv";
+import { IcognitoUser, user } from "../interfaces/userInterfaces";
 const {getSessionTokenForWebuser} = require('../vonageApi/sessionId')
 dotenv.config();
 
@@ -30,6 +31,7 @@ const attributes = {
 
 const newObjectId =  new mongoDB.ObjectId(23456676)
 const botCollection = client.db("botz").collection("botz");
+const userCollection = client.db('users').collection('userProfile');
 
 export const showlistofBotz = (callback:any)=>{
 
@@ -90,4 +92,44 @@ export const createBot =()=>{
       sessionId:"3232323"
     })
   })
+}
+
+
+
+
+
+
+
+/// userDatabase //////
+
+
+export const createUser = (user:user,callback:()=>{}) =>{
+
+  console.log(user)
+
+  userCollection.insertOne({
+    name: user.preferred_username,
+    confirmedEmail: user.confirmedEmail,
+    rank: 'Private',
+    location: 'classified',
+    sub: user.sub,
+    profileImageSrc: '',
+    userControls:[
+      {control: 'up', keyCode: 'ArrowUp'},
+      {control: 'down', keyCode: 'ArrowDown'},
+      {control: 'right',keyCode: 'ArrowRight'},
+      {control: 'left', keyCode: 'ArrowLeft'},
+      {control: 'lights', keyCode: 'l'},
+      {control: 'turretLeft', keyCode: 'a'},
+      {control: 'turretRight', keyCode: 's'},
+      {control: 'turretUp', keyCode: 'd'},
+      {control: 'turretDown', keyCode: 'x'},
+      {control: 'increaseDriveSpeed', keyCode: '+'},
+      {control: 'decreaseDriveSpeed', keyCode: '-'},
+      {control: 'increaseTurretSpeed', keyCode: '2'},
+      {control: 'decreaseTurretSpeed', keyCode: '1'}
+  ],
+
+  },callback)
+
 }

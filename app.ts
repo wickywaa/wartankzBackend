@@ -7,13 +7,7 @@ const http = require("http");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const {showlistofBotz}  = require("./database/mongodb")
-const io = new Server(server, {
-   cors: {
-    origin: ["http://localhost:3000" ,"http://192.168.0.127"],
-    methods: ["GET,POST"],
-    allowedHeaders: ["my-custom-header"],
-  }, 
-});
+const io = new Server(server);
 const userRouter = require("./Routers/userRouter");
 const botRouter= require("./Routers/botsRouter")
 
@@ -62,9 +56,9 @@ io.on("connection", (socket: Socket) => {
   //const map = [{"username":"vsf"},{"message":"sgs"}]
 
   const map = ["username","vsf"]
-   const jsonmap = JSON.stringify(map) 
+   const jsonmap = JSON.stringify(map)
 
-  socket.emit('setControls',{
+   socket.emit('setControls',{
     up: false,
     down: true,
     right: true,
@@ -76,8 +70,7 @@ io.on("connection", (socket: Socket) => {
     driveSpeed: 51,
     turretSpeed: 40,
     lights: false,
-
-  })
+  }) 
 
 
   console.log('hello')
@@ -124,6 +117,10 @@ io.on("connection", (socket: Socket) => {
     const array  = [{"username":"wjdfh"},{}]
     const jsonmap = JSON.stringify(array)
     console.log(message)
+    io.sockets.emit('login',{numUsers:34})
+    io.sockets.emit('new message',{username:'gav',message:'here is the message'})
+    //
+    
     io.sockets.emit("setControls",{...message})
   })
 });

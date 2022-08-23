@@ -7,7 +7,9 @@ const http = require("http");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const {showlistofBotz}  = require("./database/mongodb")
-const io = new Server(server);
+const io = new Server(server,{cors:{
+  origin:'http://localhost:3000'
+}});
 const userRouter = require("./Routers/userRouter");
 const botRouter= require("./Routers/botsRouter")
 
@@ -33,7 +35,6 @@ interface userobject {
 }
 
 interface botObject{
-  botName:string;
   botId:string;
   password:string;
   socketId:string;
@@ -100,10 +101,8 @@ io.on("connection", (socket: Socket) => {
   });
 
   socket.on("registerBot",(bot :botObject)=>{
-    console.log('the bot is connected',bot)
     const filteredBots = bots.filter((oldbot)=>bot.botId != oldbot.botId)
     bots = [...filteredBots,bot]
-    console.log('here is the bots list,`',bots)
     io.sockets.emit("bot_list",bots)
   })
 
@@ -113,10 +112,9 @@ io.on("connection", (socket: Socket) => {
   });
 
   socket.on("send_bot_message",(message)=>{
-    console.log('got here')
+
     const array  = [{"username":"wjdfh"},{}]
     const jsonmap = JSON.stringify(array)
-    console.log(message)
     io.sockets.emit('login',{numUsers:34})
     io.sockets.emit('new message',{username:'gav',message:'here is the message'})
     //

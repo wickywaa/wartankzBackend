@@ -73,36 +73,44 @@ io.on("connection", (socket: Socket) => {
     lights: false,
   }) 
 
-
-  console.log('hello')
   socket.on("disconnect", () => {
     const newusers = users.filter((user) => {
-      user.socketId !== socket.id;
+     return user.socketId !== socket.id;
     });
-    socket.broadcast.emit("user_list", newusers);
+
+    const newBots =  bots.filter((bot)=>{
+      return bot.socketId !== socket.id;
+    })
+
+    users = newusers;
+    bots = newBots;
+    socket.broadcast.emit("user_list", users);
+    socket.broadcast.emit("bot_list", bots)
   });
 
   socket.on('add user', (socket:Socket)=>{
-    console.log(socket)
 
   })
 
   socket.on("registeruser", (user: userobject) => {
-    console.log(user)
     const filteredusers = users.filter(
       (olduser) => user.email != olduser.email
     );
     users = [...filteredusers, user];
-    console.log(users)
     io.sockets.emit("user_list", users);
     io.sockets.emit("bot_list",bots)
+  
 
     // addUser(socket)
   });
 
   socket.on("registerBot",(bot :botObject)=>{
     const filteredBots = bots.filter((oldbot)=>bot.botId != oldbot.botId)
-    bots = [...filteredBots,bot]
+    const completedBot:botObject = {
+      ...bot,
+      socketId: socket.id
+    }
+    bots = [...filteredBots,completedBot]
     io.sockets.emit("bot_list",bots)
   })
 
@@ -115,7 +123,7 @@ io.on("connection", (socket: Socket) => {
 
     const array  = [{"username":"wjdfh"},{}]
     const jsonmap = JSON.stringify(array)
-    io.sockets.emit('login',{numUsers:34})
+    io.sockets.emit('login',{ numUsers:34})
     io.sockets.emit('new message',{username:'gav',message:'here is the message'})
     //
     

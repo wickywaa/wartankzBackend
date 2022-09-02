@@ -1,7 +1,7 @@
 import * as mongoDB from "mongodb";
 import * as dotenv from "dotenv";
 import { IcognitoUser, user } from "../interfaces/userInterfaces";
-const {getSessionTokenForWebuser} = require('../vonageApi/sessionId')
+const {getSessionTokenForWebuser,createSession} = require('../vonageApi/sessionId')
 dotenv.config();
 
 declare var process: {
@@ -95,7 +95,9 @@ export const createBot =()=>{
 }
 
 
-
+const  createGameSession = ( )=>{
+  return createSession()
+}
 
 
 

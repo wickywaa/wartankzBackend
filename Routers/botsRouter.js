@@ -2,7 +2,7 @@ const express = require('express');
 const botRouter = new express.Router();
 const cors = require('cors')
 const {showlistofBotz,getbotSessionId,updateBotSessionId} = require('./../database/mongodb')
-const  {createSessionId} = require ('../vonageApi/sessionId')
+const  {createSessionId,getSessionTokenForWebuser} = require ('../vonageApi/sessionId')
 const  corsOptions = {
     origin: 'http://localhost:3000',
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
@@ -35,8 +35,21 @@ botRouter.get('/getbotsessionidwithtoken',auth,(req,res)=>{
     })
 })
 
+botRouter.post('/createAccessToken',auth,(req,res) => {
+    const {id,endTime} = req.body.tokenRequest
+
+    getSessionTokenForWebuser(id,endTime, (token)=>{
+
+        console.log('callback has been called')
+        console.log('here is the token', token)
+        res.send(token)
+    })
+})
+
 botRouter.post('/createsession',auth,(req,res)=>{
     const botId = req.body.botId;
+
+    console.log(req.body)
 
     createSessionId(req.body.botId,(session)=>{
 

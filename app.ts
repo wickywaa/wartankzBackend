@@ -18,7 +18,6 @@ const botRouter= require("./Routers/botsRouter")
 
 showlistofBotz((botz:any)=>{
 
-console.log(botz)
 })
 
 app.use(express.json());

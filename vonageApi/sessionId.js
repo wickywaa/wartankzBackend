@@ -9,13 +9,10 @@ const createSessionId = (botId,callback)=>{
 
     opentok.createSession({}, (err, session)=> {
         if (err) return console.log(err);
-        const token  =  session.generateToken({
-            role:"publisher",
-        });
+        
 
             callback({
                 sessionId:session.sessionId,
-                token
             })   
 
       })
@@ -23,11 +20,17 @@ const createSessionId = (botId,callback)=>{
     
 };
 
-const getSessionTokenForWebuser =(sessionId,callback)=>{
+const getSessionTokenForWebuser =(sessionId,endTime,callback)=>{
+
+    const expireTime = new Date(endTime)
+    
+
+    console.log('end time ',endTime)
+    console.log(expireTime.getTime())
 
    const token = opentok.generateToken(sessionId,{
         role: "subscriber",
-        //expireTime: new Date().getTime() / 1000 + 7 * 24 * 60 * 60, // in one week
+        expireTime: endTime
         //data: "name=Johnny",
         //initialLayoutClassList: ["focus"],
       })

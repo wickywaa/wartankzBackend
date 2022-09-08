@@ -11,7 +11,8 @@ const io = new Server(server,{cors:{
   origin:'http://localhost:3000'
 }});
 const userRouter = require("./Routers/userRouter");
-const botRouter= require("./Routers/botsRouter")
+const botRouter= require("./Routers/botsRouter");
+const {getSessionTokenForWebuser} = require('./vonageApi/sessionId');
 
 
 
@@ -35,7 +36,6 @@ interface userobject {
 
 interface botObject{
   botId:string;
-  password:string;
   socketId:string;
 }
 
@@ -43,13 +43,24 @@ interface messageObject {
   userName: string;
   message: string;
 }
+
+interface gameInfo {
+  id:string;
+  endTime:number,
+  botId:string;
+}
+
 let users: userobject[] = [];
 let bots: botObject[]=[];
 let messages: messageObject[] = [];
 
-const addUser = () => {};
+const passwordCheck = ()=> {
+  return true;
+}
+export const addUser = () => {
+  console.log('hello')
+};
 
-const listofBotz =  
 
 io.on("connection", (socket: Socket) => {
   //  works eith string
@@ -71,6 +82,7 @@ io.on("connection", (socket: Socket) => {
     turretSpeed: 40,
     lights: false,
   }) 
+  
 
   socket.on("disconnect", () => {
     const newusers = users.filter((user) => {
@@ -103,15 +115,21 @@ io.on("connection", (socket: Socket) => {
     // addUser(socket)
   });
 
-  socket.on("registerBot",(bot :botObject)=>{
-    const filteredBots = bots.filter((oldbot)=>bot.botId != oldbot.botId)
-    const completedBot:botObject = {
-      ...bot,
+  socket.on("registerBot",(Id :string,password:string)=>{
+    if(!passwordCheck()){
+      return
+    }
+    const newBot:botObject={
+      botId:Id,
       socketId: socket.id
     }
-    bots = [...filteredBots,completedBot]
+    const filteredBots = bots.filter((oldbot)=>newBot.botId !== oldbot.botId)
+
+    bots = [...filteredBots,newBot]
+    console.log(bots)
     io.sockets.emit("bot_list",bots)
   })
+
 
   socket.on("add_chat_message", (message: messageObject) => {
     messages.push(message);
@@ -128,8 +146,33 @@ io.on("connection", (socket: Socket) => {
     
     io.sockets.emit("setControls",{...message})
   })
+
+  
 });
+
+export const  startGame = (botId:string,endTime:number,sessionId:string) => {
+  console.log('trying to start game')
+  const selectedBot = bots.find((bot)=>{
+    return bot.botId === botId
+  })
+  console.log(selectedBot?.socketId)
+  getSessionTokenForWebuser(sessionId,endTime,(token:string)=>{
+    io.sockets.to(selectedBot?.socketId).emit('startGame',{
+      sessionId,
+      token,
+    })
+})
+}
+
+
 
 server.listen(8080, () => {
   console.log("listening on *:8080");
 });
+
+
+
+
+
+
+

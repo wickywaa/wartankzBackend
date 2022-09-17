@@ -20,16 +20,14 @@ const createSessionId = (botId,callback)=>{
     
 };
 
-const getSessionTokenForWebuser =(sessionId,endTime,callback)=>{
+const getSessionTokenForWebuser =(Role,sessionId,endTime,callback)=>{
 
     const expireTime = new Date(endTime)
-    
-
     console.log('end time ',endTime)
     console.log(expireTime.getTime())
 
    const token = opentok.generateToken(sessionId,{
-        role: "subscriber",
+        role: Role?Role:'subscriber' ,
         expireTime: endTime
         //data: "name=Johnny",
         //initialLayoutClassList: ["focus"],

@@ -156,7 +156,9 @@ export const  startGame = (botId:string,endTime:number,sessionId:string) => {
     return bot.botId === botId
   })
   console.log(selectedBot?.socketId)
-  getSessionTokenForWebuser(sessionId,endTime,(token:string)=>{
+  getSessionTokenForWebuser('publisher',sessionId,endTime,(token:string)=>{
+    console.log('sessionid:  ',sessionId)
+    console.log('token:  ',token)
     io.sockets.to(selectedBot?.socketId).emit('startGame',{
       sessionId,
       token,

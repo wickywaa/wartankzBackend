@@ -40,7 +40,7 @@ botRouter.post('/createAccessToken',auth,(req:Request,res:Response) => {
     const {id,endTime,botId} = req.body.tokenRequest
     console.log(req.body)
 
-    getSessionTokenForWebuser(id,endTime, (token:string)=>{
+    getSessionTokenForWebuser('subscriber',id,endTime, (token:string)=>{
 
         console.log('callback has been called')
         console.log('here is the token', token)

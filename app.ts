@@ -138,13 +138,18 @@ io.on("connection", (socket: Socket) => {
 
   socket.on("send_bot_message",(message)=>{
 
+    const selectedBot = bots.find((bot)=>{
+      return bot.botId === message.botId
+    })
     const array  = [{"username":"wjdfh"},{}]
     const jsonmap = JSON.stringify(array)
     io.sockets.emit('login',{ numUsers:34})
     io.sockets.emit('new message',{username:'gav',message:'here is the message'})
     //
-    
-    io.sockets.emit("setControls",{...message})
+    console.log(message.botId)
+    console.log(message.controls)
+    console.log(selectedBot?.socketId)
+    io.sockets.to(selectedBot?.socketId).emit("setControls",message.controls)
   })
 
   

@@ -49,16 +49,14 @@ botRouter.post('/createAccessToken',auth,(req:Request,res:Response) => {
     })
 })
 
-botRouter.post('/createsession',auth,(req:Request,res:Response)=>{
+botRouter.get('/createsession',auth,(req:Request,res:Response)=>{
     const botId = req.body.botId;
 
     console.log(req.body)
 
-    createSessionId(req.body.botId,(session:{sessionId:string})=>{
+    createSessionId((session:{sessionId:string})=>{
 
-        updateBotSessionId(botId, session.sessionId,()=>{
             res.send(session)
-        });
         
     })
 })

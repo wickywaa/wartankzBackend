@@ -12,7 +12,14 @@ const io = new Server(server,{cors:{
 }});
 const userRouter = require("./Routers/userRouter");
 const botRouter= require("./Routers/botsRouter");
+import {getBotSessionId} from  './firebase'
+
 const {getSessionTokenForWebuser} = require('./vonageApi/sessionId');
+
+
+
+
+
 
 
 
@@ -126,9 +133,20 @@ io.on("connection", (socket: Socket) => {
     const filteredBots = bots.filter((oldbot)=>newBot.botId !== oldbot.botId)
 
     bots = [...filteredBots,newBot]
-    console.log(bots)
     io.sockets.emit("bot_list",bots)
+    const endTime= new Date().getTime()+864000000;
+
+   getBotSessionId(Id,(sessionId)=>{
+    console.log('sessionId from callback')
+    if(sessionId.length <1){
+      return
+    }
+    startGame(Id,endTime,sessionId)
+   })
+  
   })
+
+
 
 
   socket.on("add_chat_message", (message: messageObject) => {
@@ -146,21 +164,19 @@ io.on("connection", (socket: Socket) => {
     io.sockets.emit('login',{ numUsers:34})
     io.sockets.emit('new message',{username:'gav',message:'here is the message'})
     //
-    console.log(message.botId)
-    console.log(message.controls)
-    console.log(selectedBot?.socketId)
+ 
     io.sockets.to(selectedBot?.socketId).emit("setControls",message.controls)
   })
 
   
 });
 
+
+
 export const  startGame = (botId:string,endTime:number,sessionId:string) => {
-  console.log('trying to start game')
   const selectedBot = bots.find((bot)=>{
     return bot.botId === botId
   })
-  console.log(selectedBot?.socketId)
   getSessionTokenForWebuser('publisher',sessionId,endTime,(token:string)=>{
     console.log('sessionid:  ',sessionId)
     console.log('token:  ',token)

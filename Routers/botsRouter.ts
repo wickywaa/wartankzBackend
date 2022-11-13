@@ -44,7 +44,6 @@ botRouter.post('/createAccessToken',auth,(req:Request,res:Response) => {
 
         console.log('callback has been called')
         console.log('here is the token', token)
-        startGame(botId,endTime,id)
         res.send(token)
     })
 })

@@ -1,5 +1,4 @@
 import { Socket } from "socket.io";
-require('dotenv').config()
 const cors = require("cors");
 const express = require("express");
 const app = express();
@@ -8,7 +7,7 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const {showlistofBotz}  = require("./database/mongodb")
 const io = new Server(server,{cors:{
-  origin:'http://localhost:3000'
+  origin:['http://localhost:3000','https://www.riotbotz.com']
 }});
 const userRouter = require("./Routers/userRouter");
 const botRouter= require("./Routers/botsRouter");

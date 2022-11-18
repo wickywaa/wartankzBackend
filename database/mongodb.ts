@@ -2,21 +2,14 @@ import * as mongoDB from "mongodb";
 import {  user } from "../interfaces/userInterfaces";
 const {getSessionTokenForWebuser,createSession} = require('../vonageApi/sessionId')
 
-declare var process: {
-  env: {
-    MONGODBPASSWORD: string;
-  };
-};
+
 const dbPassword = process.env.MONGODBPASSWORD;
 
-console.log(dbPassword);
 
 const uri =
   "mongodb+srv://warbotzadmin:" +
   dbPassword +
   "@cluster0.jy9lc.mongodb.net/rawBotz%20images?retryWrites=true&w=majority";
-
-console.log(uri);
 
  const client: mongoDB.MongoClient = new mongoDB.MongoClient(uri, {});
 

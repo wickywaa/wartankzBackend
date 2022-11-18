@@ -1,5 +1,4 @@
 const OpenTok = require("opentok");
-const dotenv = require("dotenv");
 const { updateBotSessionId } = require("../database/mongodb");
 const opentok = new OpenTok(
   process.env.OPENTOK_API_KEY,

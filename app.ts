@@ -155,7 +155,7 @@ io.on("connection", (socket: Socket) => {
   });
 
   socket.on("send_bot_message",(message)=>{
-
+ 
     const selectedBot = bots.find((bot)=>{
       return bot.botId === message.botId
     })
@@ -164,7 +164,7 @@ io.on("connection", (socket: Socket) => {
     io.sockets.emit('login',{ numUsers:34})
     io.sockets.emit('new message',{username:'gav',message:'here is the message'})
     //
- 
+
     io.sockets.to(selectedBot?.socketId).emit("setControls",message.controls)
   })
 
@@ -178,8 +178,6 @@ export const  startGame = (botId:string,endTime:number,sessionId:string) => {
     return bot.botId === botId
   })
   getSessionTokenForWebuser('publisher',sessionId,endTime,(token:string)=>{
-    console.log('sessionid:  ',sessionId)
-    console.log('token:  ',token)
     io.sockets.to(selectedBot?.socketId).emit('startGame',{
       sessionId,
       token,

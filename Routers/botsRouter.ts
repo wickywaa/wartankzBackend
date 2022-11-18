@@ -5,7 +5,7 @@ const {showlistofBotz,getbotSessionId,updateBotSessionId} = require('./../databa
 const  {createSessionId,getSessionTokenForWebuser} = require ('../vonageApi/sessionId')
 import  {startGame}  from '../app';
 const  corsOptions = {
-    origin: 'http://localhost:3000',
+    origin:['http://localhost:3000','https://riotbotz.com'],
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
   }
 
@@ -28,7 +28,6 @@ botRouter.get('/getallbotz',cors(corsOptions),(req:Request,res:Response)=>{
     })
 })
 botRouter.get('/getbotsessionidwithtoken',auth,(req:Request,res:Response)=>{
-    console.log('reques here')
     const botId = req.query.botId;
     getbotSessionId(botId,(session:string)=>{
         
@@ -41,17 +40,12 @@ botRouter.post('/createAccessToken',auth,(req:Request,res:Response) => {
     console.log(req.body)
 
     getSessionTokenForWebuser('subscriber',id,endTime, (token:string)=>{
-
-        console.log('callback has been called')
-        console.log('here is the token', token)
         res.send(token)
     })
 })
 
 botRouter.get('/createsession',auth,(req:Request,res:Response)=>{
     const botId = req.body.botId;
-
-    console.log(req.body)
 
     createSessionId((session:{sessionId:string})=>{
 

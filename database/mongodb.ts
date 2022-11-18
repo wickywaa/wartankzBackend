@@ -1,8 +1,6 @@
 import * as mongoDB from "mongodb";
-import * as dotenv from "dotenv";
-import { IcognitoUser, user } from "../interfaces/userInterfaces";
+import {  user } from "../interfaces/userInterfaces";
 const {getSessionTokenForWebuser,createSession} = require('../vonageApi/sessionId')
-dotenv.config();
 
 declare var process: {
   env: {

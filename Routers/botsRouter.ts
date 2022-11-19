@@ -8,7 +8,6 @@ const  corsOptions = {
     origin:['http://localhost:3000','https://riotbotz.com'],
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
   }
-
   const auth = ((req:Request,res:Response,next:NextFunction)=>{
 
     const passwordIsCorrect =()=>{
@@ -20,11 +19,18 @@ const  corsOptions = {
     }
   })
 
+  botRouter.get('/',cors(corsOptions),(req:Request,res:Response)=>{
+
+    showlistofBotz((botz:string[])=>{
+        res.send(botz)
+    })
+})
+
 
 botRouter.get('/getallbotz',cors(corsOptions),(req:Request,res:Response)=>{
 
     showlistofBotz((botz:string[])=>{
-        res.send(botz)
+        res.send({message:'hello'})
     })
 })
 botRouter.get('/getbotsessionidwithtoken',auth,(req:Request,res:Response)=>{

@@ -16,13 +16,6 @@ import {getBotSessionId} from  './firebase'
 const {getSessionTokenForWebuser} = require('./vonageApi/sessionId');
 
 
-
-
-
-
-
-
-
 showlistofBotz((botz:any)=>{
 
 })

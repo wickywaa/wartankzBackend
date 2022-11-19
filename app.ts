@@ -186,7 +186,7 @@ export const  startGame = (botId:string,endTime:number,sessionId:string) => {
 
 
 
-server.listen(8080, () => {
+server.listen(process.env.PORT || 80, () => {
   console.log("listening on *:8080");
 });
 

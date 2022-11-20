@@ -8,7 +8,8 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const {showlistofBotz}  = require("./database/mongodb")
 const io = new Server(server,{cors:{
-  origin:false
+  methods: ["GET", "POST"],
+  origin:false,
 }});
 const userRouter = require("./Routers/userRouter");
 const botRouter= require("./Routers/botsRouter");

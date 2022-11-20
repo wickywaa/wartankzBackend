@@ -7,9 +7,7 @@ require('dotenv').config();
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const {showlistofBotz}  = require("./database/mongodb")
-const io = new Server(server,{cors:{
-  origin:['http://localhost:3000','https://www.riotbotz.com']
-}});
+const io = new Server(server);
 const userRouter = require("./Routers/userRouter");
 const botRouter= require("./Routers/botsRouter");
 import {getBotSessionId} from  './firebase'

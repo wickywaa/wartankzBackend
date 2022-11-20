@@ -5,7 +5,7 @@ const {showlistofBotz,getbotSessionId,updateBotSessionId} = require('./../databa
 const  {createSessionId,getSessionTokenForWebuser} = require ('../vonageApi/sessionId')
 import  {startGame}  from '../app';
 const  corsOptions = {
-    origin:['http://localhost:3000','https://riotbotz.com'],
+    origin:false,
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
   }
   const auth = ((req:Request,res:Response,next:NextFunction)=>{

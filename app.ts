@@ -1,5 +1,6 @@
 import { Socket } from "socket.io";
 const cors = require("cors");
+require('dotenv').config();
 const express = require("express");
 const app = express();
 const http = require("http");
@@ -130,6 +131,7 @@ io.on("connection", (socket: Socket) => {
 
    getBotSessionId(Id,(sessionId)=>{
     console.log('sessionId from callback')
+    console.log(Id,sessionId)
     if(sessionId.length <1){
       return
     }
@@ -170,6 +172,7 @@ export const  startGame = (botId:string,endTime:number,sessionId:string) => {
     return bot.botId === botId
   })
   getSessionTokenForWebuser('publisher',sessionId,endTime,(token:string)=>{
+    console.log('token')
     io.sockets.to(selectedBot?.socketId).emit('startGame',{
       sessionId,
       token,

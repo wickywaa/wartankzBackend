@@ -3,6 +3,7 @@ const cors = require("cors");
 const express = require("express");
 const app = express();
 const http = require("http");
+require('dotenv').config();
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const {showlistofBotz}  = require("./database/mongodb")

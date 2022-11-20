@@ -63,6 +63,7 @@ export const addUser = () => {
 
 
 io.on("connection", (socket: Socket) => {
+  console.log(socket.request)
   //  works eith string
   //const map = [{"username":"vsf"},{"message":"sgs"}]
 

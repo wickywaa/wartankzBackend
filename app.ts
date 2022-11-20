@@ -3,13 +3,11 @@ const cors = require("cors");
 const express = require("express");
 const app = express();
 const http = require("http");
-require('dotenv').config();
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const {showlistofBotz}  = require("./database/mongodb")
 const io = new Server(server,{cors:{
-  methods: ["GET", "POST"],
-  origin:false,
+  origin:['http://localhost:3000','https://www.riotbotz.com','91.64.183.66']
 }});
 const userRouter = require("./Routers/userRouter");
 const botRouter= require("./Routers/botsRouter");
@@ -64,7 +62,6 @@ export const addUser = () => {
 
 
 io.on("connection", (socket: Socket) => {
-  console.log(socket.request)
   //  works eith string
   //const map = [{"username":"vsf"},{"message":"sgs"}]
 
@@ -118,7 +115,6 @@ io.on("connection", (socket: Socket) => {
   });
 
   socket.on("registerBot",(Id :string,password:string)=>{
-    console.log(socket.request)
     if(!passwordCheck()){
       return
     }

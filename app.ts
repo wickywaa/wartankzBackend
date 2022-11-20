@@ -116,6 +116,7 @@ io.on("connection", (socket: Socket) => {
   });
 
   socket.on("registerBot",(Id :string,password:string)=>{
+    console.log(socket.request)
     if(!passwordCheck()){
       return
     }

@@ -1,4 +1,5 @@
 const OpenTok = require("opentok");
+
 const { updateBotSessionId } = require("../database/mongodb");
 const opentok = new OpenTok(
   process.env.OPENTOK_API_KEY,
@@ -17,7 +18,6 @@ const createSessionId = ( callback) => {
 
 const getSessionTokenForWebuser = (Role, sessionId, endTime, callback) => {
   const expireTime = new Date(endTime);
-
   const token = opentok.generateToken(sessionId, {
     role: Role ? Role : "subscriber",
     expireTime: endTime,

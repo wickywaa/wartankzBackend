@@ -15,11 +15,16 @@ const botRouter= require("./Routers/botsRouter");
 import {getBotSessionId} from  './firebase'
 
 const {getSessionTokenForWebuser} = require('./vonageApi/sessionId');
+const PORT = process.env.PORT || 8000
 
 
 showlistofBotz((botz:any)=>{
 
 })
+
+const handleUserAUth = ():boolean=>{
+ return  false
+}
 
 app.use(express.json());
 app.use(cors());
@@ -55,7 +60,7 @@ let bots: botObject[]=[];
 let messages: messageObject[] = [];
 
 const passwordCheck = ()=> {
-  return true;
+  return false;
 }
 export const addUser = () => {
   console.log('hello')
@@ -63,27 +68,20 @@ export const addUser = () => {
 
 
 io.on("connection", (socket: Socket) => {
-  //  works eith string
-  //const map = [{"username":"vsf"},{"message":"sgs"}]
 
-  const map = ["username","vsf"]
-   const jsonmap = JSON.stringify(map)
+  if(socket.handshake.auth.query.type === 'user'){
+     if(!handleUserAUth()){
+      console.log('rejected')
+      socket._error({
+        message:'unauthorized,fuck off'
+      })
+      socket.disconnect()
+      return
+     }
+  }
+  console.log('authorized')
 
-   socket.emit('setControls',{
-    up: false,
-    down: true,
-    right: true,
-    left: false,
-    turretUp: false,
-    turretDown: false,
-    turretLeft: false,
-    turretRight: false,
-    driveSpeed: 51,
-    turretSpeed: 40,
-    lights: false,
-  }) 
-  
-
+    
   socket.on("disconnect", () => {
     const newusers = users.filter((user) => {
      return user.socketId !== socket.id;
@@ -101,18 +99,17 @@ io.on("connection", (socket: Socket) => {
 
   socket.on('add user', (socket:Socket)=>{
 
+
   })
 
   socket.on("registeruser", (user: userobject) => {
+    console.log(user)
     const filteredusers = users.filter(
       (olduser) => user.email != olduser.email
     );
     users = [...filteredusers, user];
     io.sockets.emit("user_list", users);
-    io.sockets.emit("bot_list",bots)
-  
-
-    // addUser(socket)
+    io.sockets.emit("bot_list", bots)
   });
 
   socket.on("registerBot",(Id :string,password:string)=>{
@@ -130,8 +127,6 @@ io.on("connection", (socket: Socket) => {
     const endTime= new Date().getTime()+864000000;
 
    getBotSessionId(Id,(sessionId)=>{
-    console.log('sessionId from callback')
-    console.log(Id,sessionId)
     if(sessionId.length <1){
       return
     }
@@ -153,12 +148,8 @@ io.on("connection", (socket: Socket) => {
     const selectedBot = bots.find((bot)=>{
       return bot.botId === message.botId
     })
-    const array  = [{"username":"wjdfh"},{}]
-    const jsonmap = JSON.stringify(array)
     io.sockets.emit('login',{ numUsers:34})
     io.sockets.emit('new message',{username:'gav',message:'here is the message'})
-    //
-
     io.sockets.to(selectedBot?.socketId).emit("setControls",message.controls)
   })
 
@@ -172,7 +163,6 @@ export const  startGame = (botId:string,endTime:number,sessionId:string) => {
     return bot.botId === botId
   })
   getSessionTokenForWebuser('publisher',sessionId,endTime,(token:string)=>{
-    console.log('token')
     io.sockets.to(selectedBot?.socketId).emit('startGame',{
       sessionId,
       token,
@@ -180,10 +170,8 @@ export const  startGame = (botId:string,endTime:number,sessionId:string) => {
 })
 }
 
-
-
-server.listen(process.env.PORT || 80, () => {
-  console.log("listening on *:8080");
+server.listen(PORT, () => {
+  console.log(`listening on port, ${PORT}`);
 });
 
 

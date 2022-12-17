@@ -7,9 +7,6 @@ export interface user {
     sub:string,
 }
 
-
-
-
 export interface IcognitoUser {
     attributes:user
   }

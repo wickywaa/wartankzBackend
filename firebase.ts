@@ -10,8 +10,6 @@ firebaseAdmin.initializeApp({
 
 const  db = firebaseAdmin.database();
 
-
-
 export const getBotSessionId = (botId:string,callback:(id:string)=>void):void=>{
   var ref =  db.ref(`bots/${botId}`);
   ref.once("value", function(snapshot) {
@@ -21,5 +19,3 @@ export const getBotSessionId = (botId:string,callback:(id:string)=>void):void=>{
     callback(snapshot.val().sessionId)
   });
 }
-
-

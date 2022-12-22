@@ -1,4 +1,4 @@
-import express, { Express, NextFunction, Request, Response } from 'express';
+import express, { Express, NextFunction, Request, Response,  } from 'express';
 const botRouter =  express.Router();
 const cors = require('cors')
 const {showlistofBotz,getbotSessionId,updateBotSessionId} = require('./../database/mongodb')
@@ -19,6 +19,7 @@ const  corsOptions = {
     }
   })
 
+
   botRouter.get('/',cors(corsOptions),(req:Request,res:Response)=>{
 
     showlistofBotz((botz:string[])=>{
@@ -28,7 +29,6 @@ const  corsOptions = {
 
 
 botRouter.get('/getallbotz',cors(corsOptions),(req:Request,res:Response)=>{
-
     showlistofBotz((botz:string[])=>{
         res.send({message:'hello'})
     })

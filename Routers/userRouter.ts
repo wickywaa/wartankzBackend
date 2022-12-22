@@ -1,25 +1,58 @@
-const express = require('express');
-const userRouter = new express.Router()
-const {createUser} = require('../database/mongodb')
-const cors = require('cors')
-const  corsOptions = {
-    origin: '*',
-    optionsSuccessStatus: 200,// some legacy browsers (IE11, various SmartTVs) choke on 204
-    methods: ["GET", "POST"]
-  }
+import { NextFunction,Request,Response } from "express";
+import { AuthService } from "../Services/Auth";
+import  {ParamsDictionary} from  "express-serve-static-core";
+import {RequestCustom} from '../interfaces/userInterfaces';
 
+const express = require("express");
+const userRouter = new express.Router();
+const { createUser } = require("../database/mongodb");
+const cors = require("cors");
+const corsOptions = {
+  origin: "*",
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+  methods: ["GET", "POST"],
+};
 
-userRouter.get('/home',cors(corsOptions),(req:any,res:any)=>{
+const authService = new AuthService();
 
-    res.send({message:'hello'})
-})
-
-userRouter.post('/createNewUser',cors(corsOptions),(req:any,res:any) => {
-  console.log('here is the request,', req)
-  console.log(req.body.user)
-    createUser(req.body,()=>{
-      res.status(200).send()
+const userAuth = (req:RequestCustom , res:Response , next: NextFunction) => {
+  console.log(req.body.idToken)
+  if (req.body.idToken && typeof req.body.idToken === 'string' && req.body.idToken.length > 0) {
+    authService.isFirebaseUser(
+      req.body.idToken,
+      (response: { verified: boolean; uid: string }) => {
+        if (response.verified === true) {
+          next();
+        } else {
+          res.status(401).json({
+            error: {
+              message: " unauthorized",
+            },
+          });
+          return
+        }
+      }
+    );
+  } else {
+    res.status(400).json({
+      error: {
+        message: "id Token not recognized or not given",
+      },
     });
-})
+    return;
+  }
+};
 
-module.exports =  userRouter
+userRouter.use(userAuth);
+
+userRouter.get("/home", cors(corsOptions), (req: any, res: any) => {
+  res.send({ message: "hello" });
+});
+
+userRouter.post("/createNewUser", cors(corsOptions), (req: any, res: any) => {
+  createUser(req.body, () => {
+    res.status(200).send();
+  });
+});
+
+module.exports = userRouter;

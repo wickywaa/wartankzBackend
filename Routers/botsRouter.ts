@@ -10,6 +10,8 @@ const  corsOptions = {
   }
   const auth = ((req:Request,res:Response,next:NextFunction)=>{
 
+    console.log('joingin game ')
+
     const passwordIsCorrect =()=>{
         return true
     }
@@ -43,7 +45,6 @@ botRouter.get('/getbotsessionidwithtoken',auth,(req:Request,res:Response)=>{
 
 botRouter.post('/createAccessToken',auth,(req:Request,res:Response) => {
     const {id,endTime,botId} = req.body.tokenRequest
-    console.log(req.body)
 
     getSessionTokenForWebuser('subscriber',id,endTime, (token:string)=>{
         res.send(token)
@@ -58,6 +59,10 @@ botRouter.get('/createsession',auth,(req:Request,res:Response)=>{
             res.send(session)
         
     })
+})
+
+botRouter.post('/joingame',auth,(req:Request,res:Response) => {
+    
 })
 
 

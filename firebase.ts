@@ -8,7 +8,7 @@ firebaseAdmin.initializeApp({
   databaseURL: "https://rawbotz-46ddb-default-rtdb.europe-west1.firebasedatabase.app"
 });
 
-const  db = firebaseAdmin.database();
+export const  db = firebaseAdmin.database();
 export const  auth = firebaseAdmin.auth()
 
 export const getBotSessionId = (botId:string,callback:(id:string)=>void):void=>{

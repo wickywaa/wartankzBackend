@@ -6,7 +6,6 @@ const authService = new AuthService()
 
 
 const userAuth = (req:RequestCustom , res:Response , next: NextFunction) => {
-    console.log(req.body.idToken)
     if (req.body.idToken && typeof req.body.idToken === 'string' && req.body.idToken.length > 0) {
       authService.isFirebaseUser(
         req.body.idToken,

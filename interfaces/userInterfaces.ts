@@ -49,3 +49,13 @@ export interface RequestBotId extends Request {
     gameId: string;
   };
 }
+
+export interface JoinGameRequest extends Request {
+  body: {
+    idToken: string;
+    botId: string;
+    gameId: string;
+    playerId: string;
+    userId: string;
+  };
+}

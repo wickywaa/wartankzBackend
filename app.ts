@@ -56,7 +56,6 @@ io.use((socket: Socket, next: NextFunction) => {
       if (response.verified === true) {
         next();
       } else {
-        console.log("rejected");
         socket._error({
           message: "unauthorized, fuck off",
         });

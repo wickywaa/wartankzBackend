@@ -11,6 +11,7 @@ firebaseAdmin.initializeApp({
 export const  db = firebaseAdmin.database();
 export const  auth = firebaseAdmin.auth()
 
+
 export const getBotSessionId = (botId:string,callback:(id:string)=>void):void=>{
   var ref =  db.ref(`bots/${botId}`);
   ref.once("value", function(snapshot) {

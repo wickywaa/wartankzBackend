@@ -98,8 +98,6 @@ const  createGameSession = ( )=>{
 
 export const createUser = (user:user,callback:()=>{}) =>{
 
-  console.log(user)
-
   userCollection.insertOne({
     name: user.preferred_username,
     confirmedEmail: user.confirmedEmail,

@@ -1,6 +1,5 @@
 import { NextFunction,Request,Response } from "express";
 import { AuthService } from "../Services/Auth";
-import  {ParamsDictionary} from  "express-serve-static-core";
 import {RequestCustom} from '../interfaces/userInterfaces';
 
 const express = require("express");
@@ -16,7 +15,6 @@ const corsOptions = {
 const authService = new AuthService();
 
 const userAuth = (req:RequestCustom , res:Response , next: NextFunction) => {
-  console.log(req.body.idToken)
   if (req.body.idToken && typeof req.body.idToken === 'string' && req.body.idToken.length > 0) {
     authService.isFirebaseUser(
       req.body.idToken,

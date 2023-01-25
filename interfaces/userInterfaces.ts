@@ -50,12 +50,28 @@ export interface RequestBotId extends Request {
   };
 }
 
-export interface JoinGameRequest extends Request {
+export interface Player {
+  playerId: string;
+  botId: string;
+  botName: string;
+}
+export interface newGame {
+  gameType: string;
+  map: string;
+  numberOfPlayers: number;
+  playersArray: Player[];
+  duration: number;
+  gameDate: string;
+  startTime: number;
+  endTime: number;
+  credits: number;
+}
+
+export interface CreateGameRequest extends Request {
   body: {
     idToken: string;
-    botId: string;
-    gameId: string;
-    playerId: string;
-    userId: string;
+    month: string;
+    year: string;
+    newGame: newGame
   };
 }

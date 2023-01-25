@@ -24,6 +24,8 @@ export const io = new Server(server, {
 });
 const userRouter = require("./Routers/userRouter");
 const botRouter = require("./Routers/botsRouter");
+const gameRouter = require("./Routers/gameRouter");
+
 import { AuthService } from "./Services/Auth";
 import { getBotSessionId } from "./firebase";
 
@@ -41,6 +43,7 @@ app.use(express.json());
 app.use(cors());
 app.use(userRouter);
 app.use(botRouter);
+app.use(gameRouter)
 
 const passwordCheck = () => {
   return false;

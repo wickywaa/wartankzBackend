@@ -1,5 +1,5 @@
-import express, { Express, NextFunction, Request, Response,  } from 'express';
-import {createGameHandler} from  '../handlers/gameHandlers/joinGameHandler'
+import express, { NextFunction, Request, Response,  } from 'express';
+import {createGameHandler,addUserHandler} from  '../handlers';
 const gameRouter = express.Router();
 const cors = require('cors')
 const  corsOptions = {
@@ -22,6 +22,8 @@ const  corsOptions = {
 
 
   gameRouter.post('/creategame',cors(corsOptions),gameAuth,createGameHandler)
+
+  gameRouter.post('/gameadduser',cors(corsOptions),gameAuth,addUserHandler)
 
 
 

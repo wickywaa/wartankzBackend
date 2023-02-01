@@ -75,3 +75,11 @@ export interface CreateGameRequest extends Request {
     newGame: newGame
   };
 }
+
+export interface AddUserRequest extends Request {
+  body: {
+    idToken: string;
+    gameId: string;
+    userId: string
+  };
+}

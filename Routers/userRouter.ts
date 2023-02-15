@@ -1,4 +1,4 @@
-import { NextFunction,Request,Response } from "express";
+import { NextFunction,Response } from "express";
 import { AuthService } from "../Services/Auth";
 import {RequestCustom} from '../interfaces/userInterfaces';
 
@@ -32,6 +32,7 @@ const userAuth = (req:RequestCustom , res:Response , next: NextFunction) => {
       }
     );
   } else {
+    console.log(req.body.idToken)
     res.status(400).json({
       error: {
         message: "id Token not recognized or not given",

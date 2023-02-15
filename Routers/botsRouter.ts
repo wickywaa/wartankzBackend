@@ -34,6 +34,7 @@ botRouter.get('/getallbotz',cors(corsOptions),(req:Request,res:Response)=>{
     })
 })
 botRouter.get('/getbotsessionidwithtoken',auth,(req:Request,res:Response)=>{
+    
     const botId = req.query.botId;
     getbotSessionId(botId,(session:string)=>{
         
@@ -42,7 +43,8 @@ botRouter.get('/getbotsessionidwithtoken',auth,(req:Request,res:Response)=>{
 })
 
 botRouter.post('/createAccessToken',auth,(req:Request,res:Response) => {
-    const {id,endTime,botId} = req.body.tokenRequest
+    const {id,endTime,botId} = req.body
+    console.log('hshe')
 
     getSessionTokenForWebuser('subscriber',id,endTime, (token:string)=>{
         res.send(token)

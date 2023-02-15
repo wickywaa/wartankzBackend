@@ -1,21 +1,67 @@
-import { NextFunction, Request, Response } from "express";
-import { AddUserRequest, CreateGameRequest, Player} from  '../../interfaces/userInterfaces';
+import { NextFunction, Response } from "express";
+import { AddUserRequest, Player } from "../../interfaces/userInterfaces";
+import { firebaseService } from "../../Services/FirebaseService";
 
-import {} from  '../gameHandlers/'
+import { db } from "../../firebase";
+import { FirebaseGame } from "../../interfaces/FirebaseData";
 
-import {db} from  '../../firebase';
+export const addUserHandler = (
+  req: AddUserRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const { gameId, userId } = req.body;
+  const gameRef = db.ref(`games/${gameId}`);
 
-export const addUserHandler = ((req:AddUserRequest, res:Response, next:NextFunction)=>{
+  gameRef.get().then((snapshot) => {
+    const game: FirebaseGame = snapshot.val();
+    const timeNow = new Date().getTime();
+    const freeSpace = game.playersArray.find((player) =>
+      player.playerId.startsWith("Player")
+    );
 
-    const gameRef = db.ref(`games/${req.body.gameId}`);
-    gameRef.get().then((snapshot)=>{
-        const players:Player[] = snapshot.val();
+    if (game.startTime < timeNow)
+      return res
+        .status(400)
+        .send({ error: { message: "Too Late to join Game" } });
 
+    if (!freeSpace)
+      return res.status(400).send({ error: { message: "Game is Full" } });
 
-        console.log(players)
+    const newPlayers = game.playersArray.map((player) => {
+      if (player.botId === freeSpace.botId) {
+        return {
+          ...freeSpace,
+          playerId: userId,
+        };
+      }
+      return player;
+    });
 
-        return res.status(200).send('')
+    if (newPlayers.length !== game.playersArray.length)
+      return res.status(400).send({ error: { message: "Game is Full" } });
+    const newGame: FirebaseGame = {
+      ...game,
+      playersArray: newPlayers,
+    };
 
-    })
-   
-  })
+    firebaseService
+      .updateGame(req.body.gameId, newGame)
+      .then((response) => {
+        console.log(response);
+        return res.status(200).send({
+          success: {
+            message: "game Joined",
+          },
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        return res.status(400).send({
+          error: {
+            message: "unable to create game",
+          },
+        });
+      });
+  });
+};

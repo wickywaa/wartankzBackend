@@ -4,7 +4,6 @@ import {
   botObject,
   messageObject,
 } from "./interfaces/userInterfaces";
-import { NextFunction } from "express";
 const cors = require("cors");
 require("dotenv").config();
 const express = require("express");
@@ -13,14 +12,12 @@ const http = require("http");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const { showlistofBotz } = require("./database/mongodb");
-export const io = new Server(server, {
-  cors: {
-    origin: [
-      "http://localhost:3000",
-      "https://www.riotbotz.com",
-      "91.64.183.66",
-    ],
-  },
+export const io = new Server(server,{
+  cors:{
+    origin:['http://localhost:3000','https://riotbotz.com','91.64.183.66'],
+    methods: ["GET", "POST"],
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+  }
 });
 const userRouter = require("./Routers/userRouter");
 const botRouter = require("./Routers/botsRouter");
@@ -31,7 +28,7 @@ import { getBotSessionId } from "./firebase";
 
 const { getSessionTokenForWebuser } = require("./vonageApi/sessionId");
 const authService = new AuthService();
-const PORT = process.env.PORT || 8000;
+const PORT =  8080;
 
 showlistofBotz((botz: any) => {});
 
@@ -46,31 +43,17 @@ app.use(botRouter);
 app.use(gameRouter)
 
 const passwordCheck = () => {
-  return false;
+  return true;
 };
 export const addUser = () => {
   console.log("hello");
 };
 
-io.use((socket: Socket, next: NextFunction) => {
-  authService.isFirebaseUser(
-    socket.handshake.auth.token,
-    (response: { verified: boolean; uid: string }) => {
-      if (response.verified === true) {
-        next();
-      } else {
-        socket._error({
-          message: "unauthorized, fuck off",
-        });
-        socket.disconnect();
-        return;
-      }
-    }
-  );
-});
 
 io.on("connection", (socket: Socket) => {
   socket.on("disconnect", () => {
+
+    const BotLeaving = bots.find((bot)=> bot.socketId ===  socket.id)
     const newusers = users.filter((user) => {
       return user.socketId !== socket.id;
     });
@@ -83,6 +66,7 @@ io.on("connection", (socket: Socket) => {
     bots = newBots;
     socket.broadcast.emit("user_list", users);
     socket.broadcast.emit("bot_list", bots);
+    console.log(bots)
   });
 
   socket.on("add user", (socket: Socket) => {});
@@ -97,6 +81,7 @@ io.on("connection", (socket: Socket) => {
   });
 
   socket.on("registerBot", (Id: string, password: string) => {
+    
     if (!passwordCheck()) {
       return;
     }
@@ -109,7 +94,6 @@ io.on("connection", (socket: Socket) => {
     bots = [...filteredBots, newBot];
     io.sockets.emit("bot_list", bots);
     const endTime = new Date().getTime() + 864000000;
-
     getBotSessionId(Id, (sessionId) => {
       if (sessionId.length < 1) {
         return;
@@ -124,9 +108,11 @@ io.on("connection", (socket: Socket) => {
   });
 
   socket.on("send_bot_message", (message) => {
+
     const selectedBot = bots.find((bot) => {
       return bot.botId === message.botId;
     });
+
     io.sockets.emit("login", { numUsers: 34 });
     io.sockets.emit("new message", {
       username: "gav",

@@ -29,7 +29,6 @@ const { getSessionTokenForWebuser } = require("./vonageApi/sessionId");
 const authService = new AuthService();
 const PORT =  8080;
 
-
 let users: userobject[] = [];
 let bots: botObject[] = [];
 let messages: messageObject[] = [];

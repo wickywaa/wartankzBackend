@@ -8,7 +8,6 @@ const corsOptions = {
 };
 
 const gameAuth = (req: Request, res: Response, next: NextFunction) => {
-  console.log("made it here");
 
   const passwordIsCorrect = () => {
     return true;
@@ -20,7 +19,6 @@ const gameAuth = (req: Request, res: Response, next: NextFunction) => {
 };
 
 gameRouter.post("/creategame", cors(corsOptions), gameAuth, createGameHandler);
-
 gameRouter.post("/gameadduser", cors(corsOptions), gameAuth, addUserHandler);
 
 module.exports = gameRouter;

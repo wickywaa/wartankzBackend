@@ -1,73 +1,40 @@
 import { NextFunction, Request, Response } from "express";
-import { CreateGameRequest} from  '../../interfaces/userInterfaces';
+import { CreateGameRequest } from "../../interfaces/userInterfaces";
+import { checkIfGameOverLap } from "../../firebase";
 
-import {db} from  '../../firebase';
+import { db } from "../../firebase";
 
-export const createGameHandler = ((req:CreateGameRequest, res:Response, next:NextFunction)=>{
+export const createGameHandler = (
+  req: CreateGameRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const { year, month, newGame } = req.body;
+  const { startTime, endTime, map } = req.body.newGame;
+  const gameRef = db.ref(`games/${req.body.year}/${req.body.month}`);
 
-    const gameRef = db.ref(`games/`);
+  checkIfGameOverLap(year,month,startTime,endTime,map,
+    (isOverLap: boolean) => {
+      if (isOverLap) {
+        return res.status(403).send({
+          error: {
+            message: "a game already exists during this time dumb ass",
+          },
+        });
+      }
 
-    gameRef.push({...req.body.newGame},(error)=>{
-
-      if(error){
-        return res.status(500).json({
-          error:{
-            message:' create Game failed'
+      if (!isOverLap) {
+        gameRef.push({ ...req.body.newGame }, (error) => {
+          if (error) {
+            return res.status(500).send({
+              error: {
+                message: " create Game failed",
+              },
+            });
           }
-        })
+          return res.status(200).send({ success: { message: "game created" } });
+        });
       }
-    return res.status(200).send('')
-    })
-   
-  })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- /*  gameRef.once("value",(snapshot)=>{
-    const playerIds = Object.keys(snapshot.val().playersArray)
-    const players =playerIds.map((id)=>{
-        return {
-          key:id,
-          player :snapshot.val().playersArray[id]
-        }
-          
-      })
-      const userAlreadyInGame =players.find((player)=>player.player.playerId === uid) 
-  
-      const selectedPlayer = players.find((item) => {
-       return   item.player.playerId.startsWith('Player ')
-      })
-
-      if( userAlreadyInGame ){
-        return setResponse(404, 'failed')
-      }
-
-      if(selectedPlayer && userAlreadyInGame) {
-        console.log(selectedPlayer)
-      }
-
-      const updatedPlayer =  {
-        ...selectedPlayer?.player,
-        playerId:`${uid}`
-      }
-    gameRef.set(updatedPlayer,()=>{
-        console.log('saved player to game ')
-    })
-}) */
+    }
+  );
+};

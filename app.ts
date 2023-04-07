@@ -11,7 +11,6 @@ const app = express();
 const http = require("http");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
-const { showlistofBotz } = require("./database/mongodb");
 export const io = new Server(server,{
   cors:{
     origin:['http://localhost:3000','https://riotbotz.com','91.64.183.66'],
@@ -30,7 +29,6 @@ const { getSessionTokenForWebuser } = require("./vonageApi/sessionId");
 const authService = new AuthService();
 const PORT =  8080;
 
-showlistofBotz((botz: any) => {});
 
 let users: userobject[] = [];
 let bots: botObject[] = [];

@@ -1,12 +1,11 @@
 const OpenTok = require("opentok");
 
-const { updateBotSessionId } = require("../database/mongodb");
 const opentok = new OpenTok(
   process.env.OPENTOK_API_KEY,
   process.env.OPENTOK_API_SECRET_KEY
 );
 
-const createSessionId = ( callback) => {
+const createSessionId = (callback) => {
   opentok.createSession({}, (err, session) => {
     if (err) return console.log(err);
 

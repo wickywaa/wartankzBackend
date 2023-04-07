@@ -4,7 +4,6 @@ import {RequestCustom} from '../interfaces/userInterfaces';
 
 const express = require("express");
 const userRouter = new express.Router();
-const { createUser } = require("../database/mongodb");
 const cors = require("cors");
 const corsOptions = {
   origin: "*",
@@ -46,12 +45,6 @@ userRouter.use(userAuth);
 
 userRouter.get("/home", cors(corsOptions), (req: any, res: any) => {
   res.send({ message: "hello" });
-});
-
-userRouter.post("/createNewUser", cors(corsOptions), (req: any, res: any) => {
-  createUser(req.body, () => {
-    res.status(200).send();
-  });
 });
 
 module.exports = userRouter;

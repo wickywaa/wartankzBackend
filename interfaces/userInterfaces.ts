@@ -9,10 +9,6 @@ export interface user {
   sub: string;
 }
 
-export interface IcognitoUser {
-  attributes: user;
-}
-
 export interface userobject {
   Action: string;
   Username: string;

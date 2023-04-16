@@ -15,7 +15,6 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.17.2",
-    "firebase-admin": "^11.2.1",
     "mongodb": "^4.5.0",
     "opentok": "^2.14.3",
     "socket.io": "^3.0.0",

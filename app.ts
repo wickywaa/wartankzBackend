@@ -22,11 +22,13 @@ const userRouter = require("./Routers/userRouter");
 const botRouter = require("./Routers/botsRouter");
 const gameRouter = require("./Routers/gameRouter");
 
-import { AuthService } from "./Services/Auth";
-import { getBotSessionId } from "./firebase";
+ const getBotSessionId  = (id:any, callback:any)=> {
+  callback('')
+  return ''
+ }
 
 const { getSessionTokenForWebuser } = require("./vonageApi/sessionId");
-const authService = new AuthService();
+
 const PORT =  8080;
 
 let users: userobject[] = [];
@@ -91,11 +93,9 @@ io.on("connection", (socket: Socket) => {
     bots = [...filteredBots, newBot];
     io.sockets.emit("bot_list", bots);
     const endTime = new Date().getTime() + 864000000;
-    getBotSessionId(Id, (sessionId) => {
-      if (sessionId.length < 1) {
-        return;
-      }
-      startGame(Id, endTime, sessionId);
+    getBotSessionId(Id, () => {
+    
+      startGame(Id, endTime, '');
     });
   });
 

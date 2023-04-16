@@ -8,7 +8,6 @@ const corsOptions = {
 };
 
 const gameAuth = (req: Request, res: Response, next: NextFunction) => {
-
   const passwordIsCorrect = () => {
     return true;
   };

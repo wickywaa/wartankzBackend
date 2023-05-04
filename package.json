@@ -16,6 +16,7 @@
     "dotenv": "^16.0.3",
     "express": "^4.17.2",
     "mongodb": "^4.5.0",
+    "mongoose": "^7.0.4",
     "opentok": "^2.14.3",
     "socket.io": "^3.0.0",
     "socket.io-client": "^4.4.1",

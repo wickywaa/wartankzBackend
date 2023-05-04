@@ -3,7 +3,7 @@ import {
   userobject,
   botObject,
   messageObject,
-} from "./interfaces/userInterfaces";
+} from "./src/interfaces/userInterfaces/userInterfaces";
 const cors = require("cors");
 require("dotenv").config();
 const express = require("express");
@@ -18,16 +18,16 @@ export const io = new Server(server,{
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
   }
 });
-const userRouter = require("./Routers/userRouter");
-const botRouter = require("./Routers/botsRouter");
-const gameRouter = require("./Routers/gameRouter");
+const userRouter = require("./src/Routers/userRouter");
+const botRouter = require("./src/Routers/botsRouter");
+const gameRouter = require("./src/Routers/gameRouter");
 
  const getBotSessionId  = (id:any, callback:any)=> {
   callback('')
   return ''
  }
 
-const { getSessionTokenForWebuser } = require("./vonageApi/sessionId");
+const { getSessionTokenForWebuser } = require("./src/vonageApi/sessionId");
 
 const PORT =  8080;
 

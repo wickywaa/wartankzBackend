@@ -22,7 +22,11 @@ export const gameSchema = new Schema<IGame>({
     type:Number,
     required:true,
   },
-  gameDate:{
+  gameStartDate:{
+    type:String,
+    required:true,
+  },
+  gameEndDate:{
     type:String,
     required:true,
   },

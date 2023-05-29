@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from "express";
-import { createGameHandler, addUserHandler } from "../handlers";
+import { createGameHandler, addUserHandler,loadGamesHandler } from "../handlers";
 const gameRouter = express.Router();
 const cors = require("cors");
 const corsOptions = {
@@ -19,5 +19,6 @@ const gameAuth = (req: Request, res: Response, next: NextFunction) => {
 
 gameRouter.post("/creategame", cors(corsOptions), gameAuth, createGameHandler);
 gameRouter.post("/gameadduser", cors(corsOptions), gameAuth, addUserHandler);
+gameRouter.get("/games", cors(corsOptions),gameAuth,loadGamesHandler)
 
 module.exports = gameRouter;

@@ -3,7 +3,7 @@ import { createGameHandler, addUserHandler,loadGamesHandler } from "../handlers"
 const gameRouter = express.Router();
 const cors = require("cors");
 const corsOptions = {
-  origin: ["http://localhost:3000", "https://riotbotz.com", "91.64.183.66"],
+  origin: ["http://localhost:3000","http://localhost:3006", "https://riotbotz.com", "91.64.183.66"],
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 

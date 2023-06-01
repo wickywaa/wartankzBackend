@@ -10,8 +10,8 @@ export interface IGame {
     numberOfPlayers: number;
     playersArray: Player[];
     duration: number;
-    gameStartDate: string;
-    gameEndDate:string;
+    gameStartDate: Date;
+    gameEndDate:Date;
     startTime: number;
     endTime: number;
     credits: number;
@@ -23,8 +23,8 @@ export interface IGame {
     numberOfPlayers: number;
     playersArray: Player[];
     duration: number;
-    gameStartDate: string;
-    gameEndDate:string;
+    gameStartDate: Date;
+    gameEndDate: Date;
     startTime: number;
     endTime: number;
     credits: number;

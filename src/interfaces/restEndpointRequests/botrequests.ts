@@ -7,5 +7,4 @@ export interface createAccessTokenRequest {
         id:string;
         idToken:string;
     }
-
 }

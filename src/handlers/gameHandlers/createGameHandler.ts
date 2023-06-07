@@ -20,5 +20,6 @@ export const createGameHandler = (req: CreateGameRequest, res: Response, next: N
   }).
   catch((e)=>{
     console.log(e)
+    next()
   })
 };
